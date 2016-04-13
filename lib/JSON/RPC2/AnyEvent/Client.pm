@@ -6,7 +6,6 @@ use warnings;
 use utf8;
 use AnyEvent::Handle;
 use JSON::RPC2::Client;
-use JSON::XS; # while there is no perl raw data interface in JSON::RPC2::Client
 
 our $VERSION = "0.01";
 
@@ -93,7 +92,7 @@ sub AUTOLOAD {
 
    $self->{handle}->push_read( json => sub{
        my ( $handle, $hash ) = @_;
-       my ( $failed, $result, $error, $call_id ) = $self->{client}->response( encode_json($hash) );
+       my ( $failed, $result, $error, $call_id ) = $self->{client}->response( $hash );
        my $cb = shift @{$self->{cb}};
        $cb->( $failed, $result, $error, $call_id );
    } );
@@ -235,8 +234,6 @@ is valid only when no fail. The $fail is transport error.
 =head1 DEPENDENCIES
 
 =over 8
-
-=item L<JSON::XS>
 
 =item L<AnyEvent::Socket>;
 

@@ -16,7 +16,6 @@ To install this module, run the following commands:
 
 DEPENDENCIES
 
- JSON::XS
  JSON::RPC2::Client
  AnyEvent::Handle
 

@@ -6,7 +6,6 @@ author   'Serguei Okladnikov <oklaspec@gmail.com>';
 license  'perl';
 
 requires	'version';
-requires	'JSON::XS';
 requires	'JSON::RPC2::Client';
 requires	'AnyEvent';
 requires	'AnyEvent::Handle';
