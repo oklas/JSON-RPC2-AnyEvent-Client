@@ -164,9 +164,13 @@ JSON::RPC2::AnyEvent::Client - Nonblocking JSON RPC2 client with method mapping.
 =head1 DESCRIPTION
 
 JSON::RPC2::AnyEvent::Client is JSON RPC2 client, currently with
-tcp transport, handled by L<AnyEvent::Handle>, and remote
-functions mapping to local client functions, and based on
-JSON RPC2 implementation L<JSON::RPC2::Client>.
+tcp transport, handled by L<AnyEvent::Handle>. Based on
+JSON RPC2 implementation L<JSON::RPC2::Client>. Remote
+functions is mapped to local client object methods. For example
+remote function fn(...) is called with local client as $c->fn(...,cb).
+Params of function is parms of remote functions with additional one
+at the end of param list. Additional last param is result handler
+soubroutine.
 
 =head1 METHODS
 
@@ -180,11 +184,11 @@ The constructor supports these arguments (all as C<< key => value >> pairs).
 
 =item host => 'example.com'
 
-The hostname or ip address.
+The hostname or ip address. The special value "unix/" used to connect to unix domain socket.
 
 =item port => 5555
 
-The tcp port number
+The tcp port number or unix domain socket path.
 
 =item service => 'agent'
 
@@ -220,18 +224,27 @@ RPC named call type will be used.
 
 Any method name will called via RPC on remote server. 
 Last param must be event handler cb(). 
-There is params of cb ( $failed, $result, $error );
+There is params of cb ( $fail, $result, $error );
 Where $result is server responce, valid only when there
-is no fail or error.
+is no fail or error. The $error is remote server RPC error responce,
+is valid only when no fail. The $fail is transport error.
 
 =back
 
 
 =head1 DEPENDENCIES
 
- L<JSON::XS>
- L<AnyEvent::Handle>;
- L<JSON::RPC2::Client>;
+=over 8
+
+=item L<JSON::XS>
+
+=item L<AnyEvent::Socket>;
+
+=item L<AnyEvent::Handle>;
+
+=item L<JSON::RPC2::Client>;
+
+=back
 
 =head1 LICENSE
 
@@ -242,7 +255,7 @@ it under the same terms as Perl itself.
 
 =head1 AUTHOR
 
-Serguei Okladnikov E<lt> oklas@cpan.org E<gt>
+Serguei Okladnikov E<lt>oklaspec@gmail.comE<gt>
 
 =cut
 
