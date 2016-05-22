@@ -10,7 +10,7 @@ use JSON::RPC2::AnyEvent::Client;
 
 my $HOST = "127.0.0.1";
 my $PORT = 5554;
-    
+
 my $cv = AE::cv;
 
 my $srv = JSON::RPC2::AnyEvent::Server->new(

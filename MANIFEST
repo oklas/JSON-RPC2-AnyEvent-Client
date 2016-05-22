@@ -17,4 +17,5 @@ META.yml
 README
 t/.perlcriticrc
 t/00.load.t
-t/rpc_call.t
+t/01.rpc_tcp.t
+t/02.rpc_http.t

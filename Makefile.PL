@@ -7,6 +7,7 @@ license  'perl';
 
 requires	'version';
 requires	'JSON::RPC2::Client';
+requires	'JSON::XS';
 requires	'AnyEvent';
 requires	'AnyEvent::Handle';
 
@@ -15,6 +16,7 @@ test_requires	'Test::More';
 test_requires	'JSON::RPC2::AnyEvent';
 test_requires	'JSON::RPC2::AnyEvent::Server';
 test_requires	'JSON::RPC2::AnyEvent::Server::Handle';
+test_requires	'AnyEvent::HTTPD';
 
 recommends      'Test::CheckManifest'   => '0.9';
 recommends      'Test::Perl::Critic';
