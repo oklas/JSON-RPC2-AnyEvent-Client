@@ -82,6 +82,15 @@ METHODS
         call => 'listed' || 'named'
             Type of RPC call, default listed.
 
+        simplify_errors => 1
+            This option change callback api from two error to one by unify
+            transport error with text error message from remote server. This
+            option allow to simplify result callback writing but make less
+            compatible with rpc protocol. It also make result callback
+            impossible to recognize type of error is it transport or remote.
+            This is usable for simple applications. See result callback
+            handler for more info.
+
         any_method_name => 'remap_method_name'
             If remote server have method with same name as in this module,
             it is possible to rename this module "method_name" to another
@@ -103,7 +112,7 @@ METHODS
 RESULT HANDLER CALLBACK
     The result callback handler is a soubroutine that called when rpc
     function is called and result is arrived or an error occured. There
-    three param of callback is ( $fail, $result, $error );
+    three param of callback is "( $fail, $result, $error );"
 
     The $fail is transport error. It is string that contain description of
     communication or data decoding error.
@@ -113,6 +122,12 @@ RESULT HANDLER CALLBACK
 
     The $error is described in rpc protocol standart remote server error
     responce. It is valid only when no fail.
+
+    There is special case for simple applications enabled by
+    "simplify_errors" constructor argument. The result callback at this case
+    have only two params. First param is transport error if any or text
+    error message arrived from remote service. Simplified callback prototype
+    is: "( $error, $result );"
 
 DEPENDENCIES
     AnyEvent::Handle;

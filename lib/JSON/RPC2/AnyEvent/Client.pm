@@ -118,8 +118,7 @@ sub __request_tcp {
       my ( $handle, $hash ) = @_;
       my ( $failed, $result, $error, $call_id ) = $self->{client}->response( $hash );
       return $self->__error( $failed ) if $failed;
-      my $cb = delete $self->{cb}->{$call_id};
-      $cb->( $failed, $result, $error );
+      $self->__do_callback( $call_id, $failed, $result, $error );
    } );
 }
 
@@ -138,9 +137,19 @@ sub __request_http {
 
       return $self->__error( $failed ) if $failed;
 
-      my $cb = delete $self->{cb}->{$call_id};
-      $cb->( $failed, $result, $error );
+      $self->__do_callback( $call_id, $failed, $result, $error );
    };
+}
+
+sub __do_callback {
+   my ( $self, $call_id, $failed, $result, $error ) = @_;
+   my $cb = delete $self->{cb}->{$call_id};
+   if( $self->{simplify_errors} ) {
+      my $err = $failed || $error && $error->{message};
+      $cb->( $err, $result );
+   } else {
+      $cb->( $failed, $result, $error );
+   }
 }
 
 # This DESTROY-pattern originates from AnyEvent::Handle code.
@@ -266,6 +275,16 @@ like $rpc->remote_fn(), then C<agent.remote_fn> will be called
 
 Type of RPC call, default listed.
 
+=item simplify_errors => 1
+
+This option change callback api from two error to one by unify
+transport error with text error message from remote server.
+This option allow to simplify result callback writing but make
+less compatible with rpc protocol. It also make result callback
+impossible to recognize type of error is it transport or remote.
+This is usable for simple applications. See result callback
+handler for more info.
+
 =item any_method_name => 'remap_method_name'
 
 If remote server have method with same name as in this module,
@@ -298,7 +317,7 @@ Last param must be result handler callback cb().
 The result callback handler is a soubroutine that called
 when rpc function is called and result is arrived or
 an error occured. There three param of callback is
-( $fail, $result, $error );
+C<< ( $fail, $result, $error ); >>
 
 The $fail is transport error. It is string that contain
 description of communication or data decoding error.
@@ -308,6 +327,13 @@ is no fail or error.
 
 The $error is described in rpc protocol standart remote
 server error responce. It is valid only when no fail.
+
+There is special case for simple applications enabled by
+C<< simplify_errors >> constructor argument. The result callback
+at this case have only two params. First param is transport
+error if any or text error message arrived from remote service.
+Simplified callback prototype is:
+C<< ( $error, $result ); >>
 
 =head1 DEPENDENCIES
 

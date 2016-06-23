@@ -94,6 +94,16 @@ requsests (JSON RPC2 need POST requset). See description of
 
         Type of RPC call, default listed.
 
+    - simplify\_errors => 1
+
+        This option change callback api from two error to one by unify
+        transport error with text error message from remote server.
+        This option allow to simplify result callback writing but make
+        less compatible with rpc protocol. It also make result callback
+        impossible to recognize type of error is it transport or remote.
+        This is usable for simple applications. See result callback
+        handler for more info.
+
     - any\_method\_name => 'remap\_method\_name'
 
         If remote server have method with same name as in this module,
@@ -122,7 +132,7 @@ requsests (JSON RPC2 need POST requset). See description of
 The result callback handler is a soubroutine that called
 when rpc function is called and result is arrived or
 an error occured. There three param of callback is
-( $fail, $result, $error );
+`( $fail, $result, $error );`
 
 The $fail is transport error. It is string that contain
 description of communication or data decoding error.
@@ -132,6 +142,13 @@ is no fail or error.
 
 The $error is described in rpc protocol standart remote
 server error responce. It is valid only when no fail.
+
+There is special case for simple applications enabled by
+`simplify_errors` constructor argument. The result callback
+at this case have only two params. First param is transport
+error if any or text error message arrived from remote service.
+Simplified callback prototype is:
+`( $error, $result );`
 
 # DEPENDENCIES
 
