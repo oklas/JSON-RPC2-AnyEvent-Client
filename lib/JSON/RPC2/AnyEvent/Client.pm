@@ -47,11 +47,11 @@ sub __connect_tcp {
    $self->{handle} = new AnyEvent::Handle
       connect  => [ $self->{host}, $self->{port} ],
       on_error => sub {
-         $self->__error($!);
+         $self->__fail_error($!);
          $self->{handle}->destroy; # explicitly destroy handle
       },
       on_eof   => sub {
-         $self->__error("CONNECTION CLOSED $!");
+         $self->__fail_error("CONNECTION CLOSED $!");
          $self->{handle}->destroy; # explicitly destroy handle
       };
 }
@@ -74,8 +74,9 @@ sub __service {
    $self;
 }
 
-sub __error {
+sub __fail_error {
    my ( $self, $error ) = @_;
+   $self->{on_error}->( $error ) if $self->{on_error};
    foreach my $call_id ( keys %{$self->{cb}} ) {
       my $cb = delete $self->{cb}->{$call_id};
       $cb->( $error );
@@ -174,8 +175,9 @@ JSON::RPC2::AnyEvent::Client - Asynchronous nonblocking JSON RPC2 client with me
 
     # create tcp connection
     my $rpc = JSON::RPC2::AnyEvent::Client->new(
-        host    => "127.0.0.1",
-        port    => 5555,
+        host     => "127.0.0.1",
+        port     => 5555,
+        on_error => sub{ die $_[0] } 
     );
 
     # call
@@ -243,6 +245,12 @@ for 'tcp' transport.
 
 The tcp port number or unix domain socket path. Used togather
 with 'host' param.
+
+=item on_error = sub{ die $_[0] }
+
+The transport error handler callback. Remote RPC service errors
+does not mapped to this handler. This error also will emit
+all alredy waited for result callback handlers.
 
 =item url => "https://$host:$port/api/rpc"
 
