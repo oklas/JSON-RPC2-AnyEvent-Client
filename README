@@ -7,8 +7,9 @@ SYNOPSIS
 
         # create tcp connection
         my $rpc = JSON::RPC2::AnyEvent::Client->new(
-            host    => "127.0.0.1",
-            port    => 5555,
+            host     => "127.0.0.1",
+            port     => 5555,
+            on_error => sub{ die $_[0] } 
         );
 
         # call
@@ -64,6 +65,11 @@ METHODS
         port => 5555
             The tcp port number or unix domain socket path. Used togather
             with 'host' param.
+
+        on_error = sub{ die $_[0] }
+            The transport error handler callback. Remote RPC service errors
+            does not mapped to this handler. This error also will emit all
+            alredy waited for result callback handlers.
 
         url => "https://$host:$port/api/rpc"
             The url of requst. This enables http/https transport.

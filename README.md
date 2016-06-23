@@ -8,8 +8,9 @@ JSON::RPC2::AnyEvent::Client - Asynchronous nonblocking JSON RPC2 client with me
 
     # create tcp connection
     my $rpc = JSON::RPC2::AnyEvent::Client->new(
-        host    => "127.0.0.1",
-        port    => 5555,
+        host     => "127.0.0.1",
+        port     => 5555,
+        on_error => sub{ die $_[0] } 
     );
 
     # call
@@ -72,6 +73,12 @@ requsests (JSON RPC2 need POST requset). See description of
 
         The tcp port number or unix domain socket path. Used togather
         with 'host' param.
+
+    - on\_error = sub{ die $\_\[0\] }
+
+        The transport error handler callback. Remote RPC service errors
+        does not mapped to this handler. This error also will emit
+        all alredy waited for result callback handlers.
 
     - url => "https://$host:$port/api/rpc"
 
