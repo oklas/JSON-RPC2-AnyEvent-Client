@@ -1,13 +1,16 @@
 Revision history for JSON-RPC2-AnyEvent-Client
 
-0.2.0   Sun May 22 00:32:43 2016
+{{$NEXT}}
+        migrate to minilla
+
+0.02    Sun May 22 00:32:43 2016
         add http/https transport support
 
-0.1.1   Wed Apr 13 17:13:23 2016 
+0.01    Wed Apr 13 17:13:23 2016 
         remove double json decode/encode (and JSON::XS deps)
         thanks @powerman for improve his JSON::RPC2 library
         documentation additions
 
-0.1.0	Wed Feb 26 20:15:54 2014
+0.001	Wed Feb 26 20:15:54 2014
 	Initial release.
 
