@@ -8,7 +8,7 @@ use AnyEvent::Handle;
 use AnyEvent::HTTP;
 use JSON::RPC2::Client;
 
-our $VERSION = "0.02";
+our $VERSION = "v0.2.1";
 
 our $AUTOLOAD;  # it's a package global
 
