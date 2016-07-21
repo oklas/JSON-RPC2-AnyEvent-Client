@@ -5,11 +5,16 @@ use Test::More tests => 10;
 use AnyEvent::Socket;
 use JSON::RPC2::AnyEvent::Server;
 use JSON::RPC2::AnyEvent::Server::Handle; # Add `dispatch_fh' method in JSON::RPC2::AnyEvent::Server
+use IO::Socket::INET;
 
 use JSON::RPC2::AnyEvent::Client;
 
 my $HOST = "127.0.0.1";
 my $PORT = 5554;
+
+my $sock = IO::Socket::INET->new( LocalAddr => $HOST );
+$PORT = $sock->sockport();
+undef $sock;
 
 my $cv = AE::cv;
 
