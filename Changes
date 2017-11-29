@@ -2,6 +2,9 @@ Revision history for JSON-RPC2-AnyEvent-Client
 
 {{$NEXT}}
 
+0.03 2017-11-29T12:44:22Z
+	add url to error message
+
 v0.2.2 2016-07-21T07:53:59Z
         make tests independent from used ports
 

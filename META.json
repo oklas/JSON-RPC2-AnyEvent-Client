@@ -4,7 +4,7 @@
       "Serguei Okladnikov <oklaspec@gmail.com>"
    ],
    "dynamic_config" : 0,
-   "generated_by" : "Minilla/v2.5.0, CPAN::Meta::Converter version 2.150005",
+   "generated_by" : "Minilla/v2.5.0, CPAN::Meta::Converter version 2.150010",
    "license" : [
       "perl_5"
    ],
@@ -73,6 +73,6 @@
          "web" : "https://github.com/oklas/p5-JSON-RPC2-AnyEvent-Client"
       }
    },
-   "version" : "v0.2.2",
-   "x_serialization_backend" : "JSON::PP version 2.27203"
+   "version" : "0.03",
+   "x_serialization_backend" : "JSON::PP version 2.27300_01"
 }
