@@ -22,6 +22,7 @@ sub new {
       @_,
       remappable => {},
       cb => {},
+      on_error => sub{ warn shift . ' at ' . join(' ',caller) }
    }, $class;
    $self->{call} = 'call'       if 'listed' eq $self->{call};
    $self->{call} = 'call_named' if 'named'  eq $self->{call};
@@ -47,12 +48,14 @@ sub __connect_tcp {
    $self->{handle} = new AnyEvent::Handle
       connect  => [ $self->{host}, $self->{port} ],
       on_error => sub {
-         $self->__fail_error($!);
-         $self->{handle}->destroy; # explicitly destroy handle
+         my $url = 'url '.($self->{host}||'').':'.($self->{port}||'').' ';
+         $self->__fail_error($url . $!);
+         $self->{handle}->destroy if $self->{handle}; # explicitly destroy
       },
       on_eof   => sub {
-         $self->__fail_error("CONNECTION CLOSED $!");
-         $self->{handle}->destroy; # explicitly destroy handle
+         my $url = 'url '.($self->{host}||'').':'.($self->{port}||'').' ';
+         $self->__fail_error("$url CONNECTION CLOSED $!");
+         $self->{handle}->destroy if $self->{handle}; # explicitly destroy
       };
 }
 
@@ -76,7 +79,7 @@ sub __service {
 
 sub __fail_error {
    my ( $self, $error ) = @_;
-   $self->{on_error}->( $error ) if $self->{on_error};
+   $self->{on_error}->( $error );
    foreach my $call_id ( keys %{$self->{cb}} ) {
       my $cb = delete $self->{cb}->{$call_id};
       $cb->( $error );
