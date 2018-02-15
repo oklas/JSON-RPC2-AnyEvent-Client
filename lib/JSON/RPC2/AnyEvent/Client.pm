@@ -9,7 +9,7 @@ use AnyEvent::HTTP;
 use JSON::RPC2::Client;
 use Scalar::Util qw(weaken);
 
-our $VERSION = "0.03";
+our $VERSION = "0.04";
 
 our $AUTOLOAD;  # it's a package global
 
