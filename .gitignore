@@ -1,8 +1,13 @@
 /JSON-RPC2-AnyEvent-Client-*
 /.build
+/_build
 /_build_params
+/local
 /Build
 /Build.bat
 !Build/
 !META.json
 !LICENSE
+MYMETA.json
+MYMETA.json.lock
+MYMETA.yml
