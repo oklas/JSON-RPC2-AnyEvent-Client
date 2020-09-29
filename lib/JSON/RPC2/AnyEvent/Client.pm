@@ -7,6 +7,7 @@ use utf8;
 use AnyEvent::Handle;
 use AnyEvent::HTTP;
 use JSON::RPC2::Client;
+use JSON::MaybeXS;
 use Scalar::Util qw(weaken);
 
 our $VERSION = "0.04";
@@ -150,7 +151,7 @@ sub __do_callback {
    my ( $self, $call_id, $failed, $result, $error ) = @_;
    my $cb = delete $self->{cb}->{$call_id};
    if( $self->{simplify_errors} ) {
-      my $err = $failed || $error && $error->{message};
+      my $err = $failed || $error && encode_json($error);
       $cb->( $err, $result );
    } else {
       $cb->( $failed, $result, $error );
